@@ -1,2 +1,2 @@
 # SpaceExplorer
-SpaceExplorer - 2D space game
+SpaceExplorer - 2D space game.
