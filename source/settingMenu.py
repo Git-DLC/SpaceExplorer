@@ -26,6 +26,6 @@ def getSettingsMenu(screen_width, screen_height):
                           rangeslider_id='sound',
                           value_format=lambda x: str(int(x)))
     menu.add.button('Сохранить', saveFile)
-    menu.add.button('Назад', pygame_menu.events.EXIT)
+    menu.add.button('Назад', pygame_menu.events.BACK)
 
     return menu
