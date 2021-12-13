@@ -1,4 +1,5 @@
 import pygame_menu
+import source.game
 
 def getMainMenu(screen_width, screen_height, menus):
 
@@ -41,7 +42,7 @@ def getMainMenu(screen_width, screen_height, menus):
     framy = menu.add.frame_v(width=screen_width * 0.6, height=screen_height * 0.6,
                              background_color = (255, 165, 0, 100)
     )
-    framePreset(framy, widgetPreset(menu.add.button('Играть', pygame_menu.events.EXIT)))
+    framePreset(framy, widgetPreset(menu.add.button('Играть', source.game.playGame, menu, screen_width, screen_height)))
     framePreset(framy, widgetPreset(menu.add.button('Личный рекорд', menu.get_widget("scoreMenu").open)))
     framePreset(framy, widgetPreset(menu.add.button('Выбрать корабль', menu.get_widget("shipMenu").open)))
     framePreset(framy, widgetPreset(menu.add.button('Настройки', menu.get_widget("settingsMenu").open)))
