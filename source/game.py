@@ -58,11 +58,21 @@ def playGame(menu, screen_width, screen_height):
                 self.speedx = -8
             if keystate[pygame.K_RIGHT]:
                 self.speedx = 8
+            self.speedy = 0
+            if keystate[pygame.K_UP]: 
+                self.speedy = -8
+            if keystate[pygame.K_DOWN]: 
+                self.speedy = 8
+            self.rect.y += self.speedy
             self.rect.x += self.speedx
             if self.rect.right > WIDTH:
                 self.rect.right = WIDTH
             if self.rect.left < 0:
                 self.rect.left = 0
+            if self.rect.top > HEIGHT-40:
+                self.rect.top = HEIGHT-40
+            if self.rect.bottom < 40:
+                self.rect.bottom = 40
 
         def shoot(self):
             bullet = Bullet(self.rect.centerx, self.rect.top)
