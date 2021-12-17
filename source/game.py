@@ -80,7 +80,25 @@ def playGame(menu, screen_width, screen_height):
             bullets.add(bullet)
             shoot_sound.play()
 
-
+    class Mob1(pygame.sprite.Sprite):
+        def __init__(self):
+            pygame.sprite.Sprite.__init__(self)
+            self.image = pygame.transform.scale(bonys_img, (30, 40))
+            self.image.set_colorkey(BLACK)
+            self.rect = self.image.get_rect()
+            self.rect.x = random.randrange(WIDTH - self.rect.width)
+            self.rect.y = random.randrange(-100, -40)
+            self.speedy = random.randrange(1, 8)
+            self.speedx = random.randrange(-3, 3)
+    
+        def update(self):
+            self.rect.x += self.speedx
+            self.rect.y += self.speedy
+            if self.rect.top > HEIGHT + 10 or self.rect.left < -25 or self.rect.right > WIDTH + 20:
+                self.rect.x = random.randrange(WIDTH - self.rect.width)
+                self.rect.y = random.randrange(-100, -40)
+                self.speedy = random.randrange(1, 8)
+            
     class Mob(pygame.sprite.Sprite):
         def __init__(self):
             pygame.sprite.Sprite.__init__(self)
@@ -140,6 +158,7 @@ def playGame(menu, screen_width, screen_height):
     background = pygame.image.load(path.join(img_dir, "starfield.png")).convert()
     background_rect = background.get_rect()
     player_img = pygame.image.load(path.join(img_dir, "playerShip1_blue.png")).convert()
+    bonys_img = pygame.image.load(path.join(img_dir, "star_gold.png")).convert()
     bullet_img = pygame.image.load(path.join(img_dir, "laserRed01.png")).convert()
     meteor_images = []
     meteor_list = ['meteorBrown_big1.png', 'meteorBrown_med1.png', 'meteorBrown_med1.png',
@@ -160,6 +179,13 @@ def playGame(menu, screen_width, screen_height):
     bullets = pygame.sprite.Group()
     player = Player()
     all_sprites.add(player)
+    mobs1 = pygame.sprite.Group()
+    ### надо бонус
+    for i in range(2):
+        m = Mob1()
+        all_sprites.add(m)
+        mobs1.add(m)
+    
     for i in range(8):
         m = Mob()
         all_sprites.add(m)
@@ -196,7 +222,16 @@ def playGame(menu, screen_width, screen_height):
         hits = pygame.sprite.spritecollide(player, mobs, False, pygame.sprite.collide_circle)
         if hits:
             running = False
-
+        
+        # Проверка, не ударил ли моб игрока
+        hits = pygame.sprite.spritecollide(player, mobs1, True)
+        if hits:
+            score += 60
+            for hit in hits:
+                m = Mob1()
+                all_sprites.add(m)
+                mobs1.add(m)
+            running = True
         # Рендеринг
         screen.fill(BLACK)
         screen.blit(background, background_rect)
