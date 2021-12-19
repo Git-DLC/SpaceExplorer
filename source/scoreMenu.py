@@ -51,9 +51,14 @@ def getScoreMenu(screen_width, screen_height):
 
     with open('scores.txt', 'rb') as file:
         settings = pickle.load(file)
+    
+    values = []
+    r = open('records.txt', 'r', encoding = "utf-8").read()      
+    r = r.split(",")
+    print(r)            
 
-    table.add_row(['A', 'B', 1])
-    table.add_row(['α', 'β', 'γ'], cell_align=pygame_menu.locals.ALIGN_CENTER)
+    table.add_row([r[0], r[1], r[2]])
+    table.add_row([r[3], r[1], r[2]], cell_align=pygame_menu.locals.ALIGN_CENTER)
 
     framePreset(framy, widgetPreset(menu.add.button('Назад', pygame_menu.events.BACK)))
 
