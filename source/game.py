@@ -1,6 +1,8 @@
 import pygame
 import random
 from os import path
+import datetime
+from datetime import date
 
 def playGame(menu, screen_width, screen_height):
     img_dir = path.join(path.dirname(__file__), '../images')
@@ -180,6 +182,8 @@ def playGame(menu, screen_width, screen_height):
     player = Player()
     all_sprites.add(player)
     mobs1 = pygame.sprite.Group()
+    #текущая дата
+    current_date = date.today()
     ### надо бонус
     for i in range(2):
         m = Mob1()
@@ -192,9 +196,13 @@ def playGame(menu, screen_width, screen_height):
         mobs.add(m)
     score = 0
     pygame.mixer.music.play(loops=-1)
+    start_ticks=pygame.time.get_ticks()
     # Цикл игры
     running = True
     while running:
+        # время
+        seconds=(pygame.time.get_ticks()-start_ticks)/1000 #calculate how many seconds    
+
         # Держим цикл на правильной скорости
         clock.tick(FPS)
         # Ввод процесса (события)
@@ -221,6 +229,10 @@ def playGame(menu, screen_width, screen_height):
         # Проверка, не ударил ли моб игрока
         hits = pygame.sprite.spritecollide(player, mobs, False, pygame.sprite.collide_circle)
         if hits:
+            # заносим очки в файл
+            with open('records.txt','a', encoding = "utf-8") as out:
+                out.write('{},{},{},'.format(seconds,current_date,score))       
+            out.close()
             running = False
         
         # Проверка, не ударил ли моб игрока
@@ -236,7 +248,8 @@ def playGame(menu, screen_width, screen_height):
         screen.fill(BLACK)
         screen.blit(background, background_rect)
         all_sprites.draw(screen)
-        draw_text(screen, str(score), 18, WIDTH / 2, 10)
+        draw_text(screen, str(score), 18, 200, 10)
+        draw_text(screen, str(seconds), 18, 600, 10)
         # После отрисовки всего, переворачиваем экран
         pygame.display.flip()
 
