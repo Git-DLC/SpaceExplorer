@@ -33,6 +33,7 @@ shipMenu = source.shipMenu.getShipMenu(screen_width, screen_height)
 settingsMenu = source.settingMenu.getSettingsMenu(screen_width, screen_height)
 mainMenu = source.mainMenu.getMainMenu(screen_width, screen_height, [scoreMenu, shipMenu, settingsMenu])
 
+
 mainMenu.mainloop(screen)
 
 while True:

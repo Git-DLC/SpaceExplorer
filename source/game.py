@@ -1,7 +1,9 @@
 import pygame
+import source.gameOverMenu
 import random
 from os import path
 import datetime
+import pickle
 from datetime import date
 
 def playGame(menu, screen_width, screen_height):
@@ -11,6 +13,10 @@ def playGame(menu, screen_width, screen_height):
     menu.disable()
     menu.full_reset()
 
+    gameOverMenu = source.gameOverMenu.getGameOverMenu(menu, screen_width, screen_height)
+
+    with open('settings.txt', 'rb') as file:
+        brightness, loudness, shipFile = pickle.load(file)
     WIDTH = screen_width
     HEIGHT = screen_height
     FPS = 60
@@ -27,7 +33,7 @@ def playGame(menu, screen_width, screen_height):
     pygame.init()
     pygame.mixer.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    pygame.display.set_caption("Shmup!")
+    pygame.display.set_caption("SpaceExplorer!")
     clock = pygame.time.Clock()
 
     font_name = pygame.font.match_font('arial')
@@ -138,7 +144,6 @@ def playGame(menu, screen_width, screen_height):
                 self.rect.y = random.randrange(-100, -40)
                 self.speedy = random.randrange(1, 8)
 
-
     class Bullet(pygame.sprite.Sprite):
         def __init__(self, x, y):
             pygame.sprite.Sprite.__init__(self)
@@ -159,7 +164,8 @@ def playGame(menu, screen_width, screen_height):
     # Загрузка всей игровой графики
     background = pygame.image.load(path.join(img_dir, "starfield.png")).convert()
     background_rect = background.get_rect()
-    player_img = pygame.image.load(path.join(img_dir, "playerShip1_blue.png")).convert()
+    player_img = pygame.image.load(path.join(shipFile)).convert()
+    player_img.set_colorkey((0, 0, 0, 255 - (brightness/100)*255))
     bonys_img = pygame.image.load(path.join(img_dir, "star_gold.png")).convert()
     bullet_img = pygame.image.load(path.join(img_dir, "laserRed01.png")).convert()
     meteor_images = []
@@ -175,7 +181,7 @@ def playGame(menu, screen_width, screen_height):
     for snd in ['expl3.wav', 'expl6.wav']:
         expl_sounds.append(pygame.mixer.Sound(path.join(snd_dir, snd)))
     pygame.mixer.music.load(path.join(snd_dir, 'tgfcoder-FrozenJam-SeamlessLoop.ogg'))
-    pygame.mixer.music.set_volume(0.4)
+    pygame.mixer.music.set_volume(loudness)
     all_sprites = pygame.sprite.Group()
     mobs = pygame.sprite.Group()
     bullets = pygame.sprite.Group()
@@ -254,5 +260,8 @@ def playGame(menu, screen_width, screen_height):
         pygame.display.flip()
 
     pygame.mixer.music.stop()
+    gameOverMenu.mainloop(screen)
+
     menu.enable()
+    menu.mainloop(screen)
 

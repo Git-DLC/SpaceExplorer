@@ -1,6 +1,14 @@
 import pygame_menu
+import pickle
 
 def getShipMenu(screen_width, screen_height):
+
+    shipFile = "images/playerShip1_blue.png"
+    def changeShip(value, ship):
+        global shipFile
+        shipFile = ship
+        im = menu.get_widget("image")
+        im.set_image(pygame_menu.baseimage.BaseImage(shipFile))
 
     def framePreset(frame, widget):
         frame = frame.pack(widget,
@@ -14,6 +22,16 @@ def getShipMenu(screen_width, screen_height):
         widget._background_color = (255, 165, 0)
         widget.set_border(1, (0, 0, 0))
         return widget
+
+    def saveShip():
+        global shipFile
+        with open('settings.txt', 'rb') as file:
+            settings = pickle.load(file)
+        file.close()
+        settings[2] = shipFile
+        with open('settings.txt', 'wb') as file:
+            pickle.dump(settings, file)
+        file.close()
 
     background_image = pygame_menu.BaseImage(
         image_path="images/background.png",
@@ -34,8 +52,14 @@ def getShipMenu(screen_width, screen_height):
                              background_color=(255, 165, 0, 100)
                              )
 
-
-    framePreset(framy, widgetPreset(menu.add.selector('Корабль :', [('Корабль1', 1), ('Корабль2', 2)])))
+    framePreset(framy, widgetPreset(menu.add.image(shipFile, scale=(1, 1), image_id="image" ) ))
+    framePreset(framy, widgetPreset(menu.add.selector(
+        'Корабль :',
+        [('Blue', "images/playerShip1_blue.png"),
+         ('Red', "images/playerShip2_red.png")],
+        onchange=changeShip
+    )))
+    framePreset(framy, widgetPreset(menu.add.button('Сохранить', saveShip)))
     framePreset(framy, widgetPreset(menu.add.button('Назад', pygame_menu.events.BACK)))
 
     return menu

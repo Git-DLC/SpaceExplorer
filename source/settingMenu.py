@@ -19,13 +19,18 @@ def getSettingsMenu(screen_width, screen_height):
         return widget
 
     def saveFile():
+        with open('settings.txt', 'rb') as file:
+            settings = pickle.load(file)
+        file.close()
         settings = [menu.get_widget('brightness').get_value(),
-                    menu.get_widget('sound').get_value()]
+                    menu.get_widget('sound').get_value(),
+                    settings[2]]
         with open('settings.txt', 'wb') as file:
             pickle.dump(settings, file)
+        file.close()
 
     def loadFile():
-        settings = [50, 50]
+        settings = [50, 50, "images/playerShip1_blue.png"]
         with open('settings.txt', 'rb') as file:
             settings = pickle.load(file)
         return settings

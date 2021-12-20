@@ -7,7 +7,7 @@ def getMainMenu(screen_width, screen_height, menus):
         frame = frame.pack(widget,
                    align=pygame_menu.locals.ALIGN_CENTER,
                    vertical_position=pygame_menu.locals.POSITION_CENTER,
-                   margin=(0,10)
+                   margin=(0, 10)
                    )
         return frame
 
@@ -15,6 +15,7 @@ def getMainMenu(screen_width, screen_height, menus):
         widget._background_color = (255, 165, 0)
         widget.set_border(1, (0, 0, 0))
         return widget
+
 
     scoreMenu = menus[0]
     shipMenu = menus[1]
@@ -42,11 +43,12 @@ def getMainMenu(screen_width, screen_height, menus):
     framy = menu.add.frame_v(width=screen_width * 0.6, height=screen_height * 0.6,
                              background_color = (255, 165, 0, 100)
     )
-    framePreset(framy, widgetPreset(menu.add.button('Играть', source.game.playGame, menu, screen_width, screen_height)))
+
+    framePreset(framy, widgetPreset(menu.add.button('Играть', source.game.playGame,
+                                                    menu, screen_width, screen_height)))
     framePreset(framy, widgetPreset(menu.add.button('Личный рекорд', menu.get_widget("scoreMenu").open)))
     framePreset(framy, widgetPreset(menu.add.button('Выбрать корабль', menu.get_widget("shipMenu").open)))
     framePreset(framy, widgetPreset(menu.add.button('Настройки', menu.get_widget("settingsMenu").open)))
     framePreset(framy, widgetPreset(menu.add.button('Выход', pygame_menu.events.EXIT)))
-
 
     return menu
