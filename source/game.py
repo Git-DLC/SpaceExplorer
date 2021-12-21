@@ -177,11 +177,14 @@ def playGame(menu, screen_width, screen_height):
         meteor_images.append(pygame.image.load(path.join(img_dir, img)).convert())
     # Загрузка мелодий игры
     shoot_sound = pygame.mixer.Sound(path.join(snd_dir, 'pew.wav'))
+    shoot_sound.set_volume(loudness/100)
     expl_sounds = []
     for snd in ['expl3.wav', 'expl6.wav']:
-        expl_sounds.append(pygame.mixer.Sound(path.join(snd_dir, snd)))
+        sound = pygame.mixer.Sound(path.join(snd_dir, snd))
+        sound.set_volume(loudness/100)
+        expl_sounds.append(sound)
     pygame.mixer.music.load(path.join(snd_dir, 'tgfcoder-FrozenJam-SeamlessLoop.ogg'))
-    pygame.mixer.music.set_volume(loudness)
+    pygame.mixer.music.set_volume(loudness/100)
     all_sprites = pygame.sprite.Group()
     mobs = pygame.sprite.Group()
     bullets = pygame.sprite.Group()
